@@ -1,20 +1,32 @@
+const cors = require("cors");
 const express = require('express');
-const router = require('../routes/UserRoutes');
-class Server{
+const bodyParser = require('body-parser');
 
-    PORT = 3032;
-    constructor( ){
+class Server {
+
+    PORT = 8080;
+    constructor() {
         this.app = express();
         this.listenServer();
+        this.middlewares();
         this.routes();
     }
 
-    routes(){
-        this.app.use( "/", require('../routes/UserRoutes') );
+
+    middlewares() {
+        this.app.use(cors());
+        this.app.use(bodyParser.json());
+        this.app.use(bodyParser.urlencoded({
+            extended: true,
+        }));
     }
 
-    listenServer(){
-       this.app.listen( this.PORT, () => console.log(`Servidor corriendo en ${this.PORT}`)); 
+    routes() {
+        this.app.use("/", require('../routes/UserRoutes'));
+    }
+
+    listenServer() {
+        this.app.listen(this.PORT, () => console.log(`Servidor corriendo en ${this.PORT}`));
     }
 }
 
